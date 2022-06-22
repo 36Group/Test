@@ -1,0 +1,478 @@
+#include<iostream>
+#include<string>
+#include<sstream>
+using namespace std;
+class Term
+{
+public:
+Term(float mycoef, int mypower){coef= mycoef;power= mypower;}
+void print(){ cout<<coef<<"x^"<<power<<'\n';}
+Term operator+(const Term& varIn);
+Term operator+(float numIn)const;
+friend Term operator+(const float numIn, const Term& varIn);
+Term operator-(const Term& varIn);
+Term operator-(float numIn)const;
+friend Term operator-(const float numIn, const Term& varIn);
+Term operator*(const Term& varIn);
+Term operator*(float numIn)const;
+friend Term operator*(const float numIn, const Term& varIn);
+Term operator/(const Term& varIn);
+Term operator/(float numIn)const;
+friend Term operator/(const float numIn, const Term& varIn);
+Term& operator+=(const Term& varIn);
+Term& operator-=(const Term& varIn);
+Term& operator*=(const Term& varIn);
+Term& operator/=(const Term& varIn);
+Term& operator=(const Term& varIn);
+bool operator>(const Term& varIn);
+bool operator>(float numIn)const;
+friend bool operator>(const float numIn, const Term& varIn);
+bool operator<(const Term& varIn);
+bool operator<(float numIn)const;
+friend bool operator<(const float numIn, const Term& varIn);
+bool operator<=(const Term& varIn);
+bool operator<=(float numIn)const;
+friend bool operator<=(const float numIn, const Term& varIn);
+bool operator>=(const Term& varIn);
+bool operator>=(float numIn)const;
+friend bool operator>=(const float numIn, const Term& varIn);
+bool operator==(const Term& varIn);
+bool operator==(float numIn)const;
+friend bool operator==(const float numIn, const Term& varIn);
+bool operator!=(const Term& varIn);
+bool operator!=(float numIn)const;
+friend bool operator!=(const float numIn, const Term& varIn);
+Term operator~();
+Term& operator++();
+Term operator++(int);
+Term& operator--();
+Term operator--(int);
+float operator()(float numIn)const;
+friend ostream& operator<<(ostream& out, const Term& varIn);
+friend istream& operator>>(istream& in, Term& varIn);
+void set_coef(float mycoef){ coef = mycoef;};
+void set_power(int mypower){power = mypower;};
+float get_coef(){return coef;};
+int get_power(){return power;};
+private:
+float coef;
+int power;
+};
+
+Term Term::operator+(const Term& varIn)
+{
+    if(power == varIn.power)
+    {
+      return Term(coef + varIn.coef ,power);
+    }
+  return Term(coef, power);
+}
+
+Term Term::operator+(float numIn)const
+{
+  if(power == 0)
+  {
+    return Term(coef+ numIn, power);
+  }
+  return Term(coef, power);
+}
+
+Term operator+(const float numIn, const Term& varIn)
+{
+  if(varIn.power == 0)
+  {
+    return Term(varIn.coef+ numIn, varIn.power);
+  }
+  return Term(varIn.coef,varIn.power);
+}
+
+Term Term::operator-(const Term& varIn)
+{
+  if(power == varIn.power)
+  {
+    return Term(coef - varIn.coef ,power);
+  }
+  return Term(coef, power);
+}
+
+Term Term::operator-(float numIn)const
+{
+  if(power == 0)
+  {
+    return Term(coef - numIn, power);
+  }
+  return Term(coef, power);
+}
+
+Term operator-(const float numIn, const Term& varIn)
+{
+  if(varIn.power == 0)
+  {
+    return Term(varIn.coef- numIn, varIn.power);
+  }
+  return Term(varIn.coef,varIn.power);
+}
+
+Term Term::operator*(const Term& varIn)
+{
+  return Term(coef* varIn.coef , power+ varIn.power);
+}
+
+Term Term::operator*(float numIn)const
+{
+  return Term(coef* numIn, power);
+}
+
+Term operator*(const float numIn, const Term& varIn)
+{
+  return Term(varIn.coef* numIn, varIn.power);
+}
+
+Term Term::operator/(const Term& varIn)
+{  
+  return Term(coef/varIn.coef, power- varIn.power);
+}
+
+Term Term::operator/(float numIn)const
+{
+  return Term(coef/numIn, power);
+}
+
+Term operator/(const float numIn, const Term& varIn)
+{
+  return Term(varIn.coef/ numIn, varIn.power);
+}
+
+Term& Term::operator+=(const Term& varIn)
+{
+  if(power == varIn.power)
+  {
+    coef+= varIn.coef;
+  }
+ return *this;
+}    
+
+Term& Term::operator-=(const Term& varIn)
+{
+  if(power == varIn.power)
+  {
+   coef-= varIn.coef;
+  }
+ return *this;
+}    
+
+Term& Term::operator*=(const Term& varIn)
+{
+  coef*= varIn.coef;
+  power+= varIn.power;
+  return *this;
+}
+
+Term& Term::operator/=(const Term& varIn)
+{
+  coef/= varIn.coef;
+  power-= varIn.power;
+  return *this;
+}
+
+Term& Term::operator=(const Term& varIn)
+{
+  coef= varIn.coef;
+  power= varIn.power;
+  return *this;
+}
+
+bool Term::operator>(const Term& varIn)
+{
+  return(coef > varIn.coef && power > varIn.power);
+}
+
+bool Term::operator>(float numIn)const
+{
+  if(power == 0)
+  {
+    return(coef > numIn);
+  }
+ return false;
+}
+
+bool operator>(const float numIn, const Term& varIn)
+{
+  if(varIn.power == 0)
+  {
+    return(numIn > varIn.coef);
+  }
+ return false;
+}
+
+bool Term::operator<(const Term& varIn)
+{
+  return(coef < varIn.coef && power < varIn.power);
+}
+
+bool Term::operator<(float numIn)const
+{
+  if(power == 0)
+  {
+    return(coef < numIn);
+  }
+ return false;
+}
+
+bool operator<(const float numIn, const Term& varIn)
+{
+  if(varIn.power == 0)
+  {
+    return(numIn < varIn.coef);
+  }
+ return false;
+}
+
+bool Term::operator<=(const Term& varIn)
+{
+  return(coef <= varIn.coef && power <= varIn.power);
+}
+
+bool Term::operator<=(float numIn)const
+{
+  if(power == 0)
+  {
+    return(coef <= numIn);
+  }
+ return false;
+}
+
+bool operator<=(const float numIn, const Term& varIn)
+{
+  if(varIn.power == 0)
+  {
+    return(numIn <= varIn.coef);
+  }
+ return false;
+}
+
+bool Term::operator>=(const Term& varIn)
+{
+  return(coef >= varIn.coef && power >= varIn.power);
+}
+
+bool Term::operator>=(float numIn)const
+{
+  if(power == 0)
+  {
+    return(coef >= numIn);
+  }
+ return false;
+}
+
+bool operator>=(const float numIn, const Term& varIn)
+{
+  if(varIn.power == 0)
+  {
+    return(numIn >= varIn.coef);
+  }
+ return false;
+}
+
+bool Term::operator==(const Term& varIn)
+{
+  return(coef == varIn.coef && power == varIn.power);
+}
+
+bool Term::operator==(float numIn)const
+{
+  if(power == 0)
+  {
+    return(coef == numIn);
+  }
+ return false;
+}
+
+bool operator==(const float numIn, const Term& varIn)
+{
+  if(varIn.power == 0)
+  {
+    return(numIn == varIn.coef);
+  }
+ return false;
+}
+
+bool Term::operator!=(const Term& varIn)
+{
+  return!(coef == varIn.coef && power == varIn.power);
+} 
+
+bool Term::operator!=(float numIn)const
+{
+  if(power == 0)
+  {
+    return!(coef == numIn);
+  }
+ return false;
+}
+
+bool operator!=(const float numIn, const Term& varIn)
+{
+  if(varIn.power == 0)
+  {
+    return!(numIn == varIn.coef);
+  }
+ return false;
+}
+
+Term Term::operator~()
+{
+  return Term(coef* power, power-1);
+}
+
+Term& Term::operator++()
+{
+  if(power == 0)
+  {
+    coef+=1;
+  }
+  return *this;
+}
+
+Term Term::operator++(int)
+{ 
+  Term temp = *this;
+  if(power == 0)
+  {
+    coef+=1;
+  }
+  return temp;
+}
+
+
+Term& Term::operator--()
+{
+  if(power == 0)
+  {
+    coef-=1;
+  }
+  return *this;
+}
+
+Term Term::operator--(int)
+{ 
+  Term temp = *this;
+  if(power == 0)
+  {
+    coef-=1;
+  }
+  return temp;
+}
+
+float Term::operator()(float numIn)const
+{  
+  float result = 1;
+  for(int i=0 ; i<power; i++)
+  {
+    result*=numIn;
+  }
+  return result*coef;
+}
+
+ostream& operator<<(ostream& out, const Term& varIn)
+{
+  if(varIn.coef == 0)
+  {
+    out<<"\"0\"";
+  }else if(varIn.power == 0)
+  {
+    out<<"\""<<varIn.coef<<"\"";
+  }else if(varIn.power == 1)
+  {
+    if(varIn.coef == 1)
+    {
+      out<<"\"x\"";
+    }else
+    {
+      out<<"\""<<varIn.coef<<"x\"";
+    }
+  }else if(varIn.coef == 1)
+  {
+    out<<"\"x^"<< varIn.power<<"\"";
+  }else
+  { 
+    out<<"\""<<varIn.coef<<"x^"<<varIn.power<<"\"";
+  }
+ return out;
+}
+
+istream& operator>>(istream& in,  Term& varIn)
+{  
+  string numIn;
+  string coefnum ="";
+  string powernum= "";
+  in>>numIn;
+  int mycoef ,mypower, negacoef;
+  mycoef =numIn.find("x");
+  mypower =numIn.find("^");
+  negacoef =numIn.find("-");
+  
+  if(negacoef == -1)
+  {
+    for(int i=0; i<mycoef; i++)  
+    {
+      coefnum +=numIn[i];
+    }
+  }else if(negacoef == 0)
+  {
+    for(int i=1; i<mycoef; i++)  
+    {
+      coefnum +=numIn[i];
+    }
+  }
+  
+
+  if(coefnum=="")
+  {
+    for(int i=numIn.size()- mypower; i<numIn.size(); i++)
+    {
+      powernum +=numIn[i];
+    }
+  }else
+  {
+    for(int i=numIn.size()- mypower+1; i<numIn.size(); i++)
+    {
+      powernum +=numIn[i];
+    }
+  }
+ 
+  if(powernum =="")
+  {  
+    varIn.power = 1;
+  }else
+  {
+    int realpower =stoi(powernum);
+    varIn.power =realpower;
+   
+  }
+   
+  if(coefnum =="")
+  {
+    varIn.coef = 1;
+    if(negacoef == 0)
+    {
+      varIn.coef= -1;
+    }
+  }else
+  {
+    float realcoef =stof(coefnum);
+    if(negacoef == 0)
+    {
+      realcoef *= -1;
+    }
+    varIn.coef = realcoef;
+  }
+  
+  if(mycoef == -1)
+  {
+    int num =stof(numIn);
+    varIn.coef = num;
+    varIn.power =0;
+  }
+  return in;
+}
