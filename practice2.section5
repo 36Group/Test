@@ -1,0 +1,212 @@
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+
+class Time
+{ 
+    public:
+    Time(int myHour, int myMinute);
+    Time(int myHour);
+    bool check_hour(int myHour);
+    bool check_minute(int myMinute);
+    void change_time(int newHour, int newMinute);
+    int get_hour(){return hour;};
+    int get_minute(){return minute;};
+    int compare(Time comparand);
+    Time& operator=(const Time&);
+    string parts_day();
+     
+    private:
+    int hour ;
+    int minute;
+
+};
+  
+Time ::Time(int myHour, int myMinute)
+{
+    if(check_hour(myHour) && check_minute(myMinute))
+    {
+        hour = myHour;
+        minute = myMinute;
+    }
+    else{
+        cout<<"invalid"<<'\n';
+        abort();
+    }
+}
+
+Time ::Time(int myHour)
+{
+    if(check_hour(myHour))
+    {
+        hour = myHour;
+        minute = 0 ;
+    }
+    else{
+        cout<<"invalid"<<'\n';
+        abort();
+    }
+       
+}
+bool Time::check_hour(int myHour)
+{
+    if( myHour< 0 || myHour> 24)
+    {
+       return false;
+    }
+  return true;
+}
+
+bool Time::check_minute(int myMinute)
+{
+    if(myMinute< 0 || myMinute> 59)
+    { 
+        return false;
+    }
+  return true;
+}
+
+void Time::change_time(int newHour, int newMinute)
+{
+    if(check_hour(newHour) && check_minute(newMinute))
+    {  
+       hour = newHour;
+      minute = newMinute;
+    }else{
+        cout<<"invalid"<<'\n';
+        abort();
+      
+    }
+    
+} 
+
+Time& Time::operator=(const Time& temp)
+{
+    hour = temp.hour;
+    minute = temp.minute;
+    return *this;
+}
+
+int Time::compare(Time comparand)
+{
+   if(hour == comparand.hour)
+   {
+       if(minute == comparand.minute)
+       {
+         return 0;
+        }else if(minute > comparand.minute)
+        {
+         return 1;
+        }else{return -1;}
+    }else if(hour > comparand.hour)
+   {
+     return 1;
+    }else{return -1;}
+}
+
+string Time::parts_day()
+{    
+    string part;
+    if(hour>= 0 && hour <=11)
+    {
+        if(hour== 0 && minute== 0)
+        {
+           part = "night";
+           
+        }else{
+           part = "morning";
+        }
+    }
+    
+    if(hour== 12 && minute== 0)
+    {
+        part = "noon";
+
+    }else if(hour >=12 && hour<=16)
+    {
+        part = "afternoon";
+    }
+    
+    if(hour>= 17 && hour<= 19 )
+    {
+        part = "evening";
+    }
+
+    if(hour >=20)
+    {
+        part = "night";
+    }
+  return part;
+}
+
+int main()
+      
+{   
+       int nowHour;
+       int nowMinute;
+        Time now(0, 0);
+    int section;
+    do{ 
+       cout<<"select the desired section"<<'\n';
+       cout<<"1.hour and minute timing"<<'\n';
+       cout<<"2.only hour timing"<<'\n';
+       cout<<"3.change time"<<'\n';
+       cout<<"4.show time"<<'\n';
+       cout<<"5.compare two times"<<'\n';
+       cout<<"6.parts of the day"<<'\n';
+       cout<<"7.exit"<<'\n';
+       cin>>section;
+       if( section ==1)
+       {
+            cout<<"enter hour and minute"<<'\n'<<"hour: ";
+            cin>>nowHour;
+            cout<<"minute: ";
+            cin>>nowMinute;
+            Time temp(nowHour, nowMinute);
+            now = temp ;
+       }
+        
+       if(section ==2)
+       {
+           cout<<"enter hour: ";
+           cin>>nowHour;
+           Time temp(nowHour);
+           now = temp;
+       }
+    
+       if(section ==3)
+        {
+            cout<<"enter new time"<<'\n'<<"hour: ";
+            cin>>nowHour;
+            cout<<"minute: ";
+            cin>>nowMinute;
+            now.change_time(nowHour, nowMinute);
+        }
+        
+       if(section ==4)
+       {
+           cout<<"hour: "<<now.get_hour()<<'\n'<<"minute: "<<now.get_minute()<<'\n';
+           cout<<now.get_hour()<<" : "<<now.get_minute()<<'\n';
+       }
+
+
+       if(section ==5)
+       {  int comHour , comMin;
+          cout<<"\"comparand time\""<<'\n'<< "hour: ";
+          cin>>comHour;
+          cout<<"minute: ";
+          cin>>comMin;
+          Time comparand(comHour, comMin);
+         cout<< now.compare(comparand)<<"\n";
+       }
+       
+       if(section ==6)
+       {
+           cout<<now.parts_day()<<"\n";
+       }
+
+    }while(section !=7);
+
+
+
+}
